@@ -48,14 +48,14 @@ const Contact = () => {
               <span className="contact-icon">◎</span>
               <div>
                 <span className="contact-label">Ubicación</span>
-                <span className="contact-value">Ciudad de México &amp; Área Metropolitana</span>
+                <span className="contact-value">Cuernavaca;Morelos</span>
               </div>
             </div>
             <div className="contact-item">
               <span className="contact-icon">◈</span>
               <div>
                 <span className="contact-label">WhatsApp</span>
-                <span className="contact-value">+52 55 0000 0000</span>
+                <span className="contact-value">+52 777 510 23 13</span>
               </div>
             </div>
             <div className="contact-item">
@@ -102,7 +102,6 @@ const Contact = () => {
                     <option>XV Años</option>
                     <option>Cumpleaños</option>
                     <option>Evento Empresarial</option>
-                    <option>Graduación</option>
                     <option>Otro</option>
                   </select>
                 </div>
