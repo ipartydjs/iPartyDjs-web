@@ -1,3 +1,4 @@
+import { Image } from '@imagekit/react';
 import { useRef, useEffect, useState } from 'react';
 import './Gallery.css';
 
@@ -40,6 +41,13 @@ const Gallery = () => {
             onMouseLeave={() => setHovered(null)}
             data-hover
           >
+             <Image
+              urlEndpoint="https://ik.imagekit.io/uyilq4hre"
+              src="/WhatsApp Image 2026-05-20 at 6.37.13 PM.jpeg"
+              width={500}
+              height={500}
+              alt="Picture of the author"
+            />
             <div className="gallery-pattern">
               {Array.from({ length: 6 }).map((_, j) => (
                 <div key={j} className="gallery-ring" style={{ animationDelay: `${j * 0.4}s` }} />
