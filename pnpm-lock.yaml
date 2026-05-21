@@ -8,6 +8,9 @@ importers:
 
   .:
     dependencies:
+      '@imagekit/react':
+        specifier: ^5.0.2
+        version: 5.0.2(react-dom@19.2.6(react@19.2.6))(react@19.2.6)
       react:
         specifier: ^19.2.6
         version: 19.2.6
@@ -201,6 +204,14 @@ packages:
     resolution: {integrity: sha512-bV0Tgo9K4hfPCek+aMAn81RppFKv2ySDQeMoSZuvTASywNTnVJCArCZE2FWqpvIatKu7VMRLWlR1EazvVhDyhQ==}
     engines: {node: '>=18.18'}
 
+  '@imagekit/javascript@5.4.0':
+    resolution: {integrity: sha512-Z3RwkCbde2B4jaDOHFBszkctT0YB9JoAnqFvPQ3JP6iPzy0Xfd8J1JpI9dHz6sYsFjAiwI3sb2BgcuLX5XCgfA==}
+
+  '@imagekit/react@5.0.2':
+    resolution: {integrity: sha512-xsZNEa0FLkgdIs9KbWLwsY4ZjFsTsueyXdqq6Ei+TX9ynAX5u6Nuz+MQ9fXV6mh3fPELZPQKTKF9VcURvFdExg==}
+    peerDependencies:
+      react: ^16.13.1 || ^17.0.0 || ^18.0.0 || ^19.0.0
+      react-dom: ^16.13.1 || ^17.0.0 || ^18.0.0 || ^19.0.0
 
   '@jridgewell/gen-mapping@0.3.13':
     resolution: {integrity: sha512-2kkt/7niJ6MgEPxF0bYdQ6etZaA+fQvDcLKckhy1yIQOzaoKjBBjSj63/aLVjYE3qhRt5dvM+uUyfCg6UKCBbA==}
@@ -1136,6 +1147,14 @@ snapshots:
   '@humanwhocodes/module-importer@1.0.1': {}
 
   '@humanwhocodes/retry@0.4.3': {}
+
+  '@imagekit/javascript@5.4.0': {}
+
+  '@imagekit/react@5.0.2(react-dom@19.2.6(react@19.2.6))(react@19.2.6)':
+    dependencies:
+      '@imagekit/javascript': 5.4.0
+      react: 19.2.6
+      react-dom: 19.2.6(react@19.2.6)
 
   '@jridgewell/gen-mapping@0.3.13':
     dependencies:
