@@ -48,7 +48,7 @@ const Contact = () => {
               <span className="contact-icon">◎</span>
               <div>
                 <span className="contact-label">Ubicación</span>
-                <span className="contact-value">Cuernavaca;Morelos</span>
+                <span className="contact-value">Cuernavaca-Morelos</span>
               </div>
             </div>
             <div className="contact-item">
