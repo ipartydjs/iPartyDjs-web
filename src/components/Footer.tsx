@@ -51,8 +51,8 @@ const Footer = () => {
           <a href="#">Términos y Condiciones</a>
         </div>
         <div className="footer-social">
-          <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" className="social-link">Instagram</a>
-          <a href="https://wa.me/525500000000" target="_blank" rel="noopener noreferrer" className="social-link">WhatsApp</a>
+          <a href="https://www.instagram.com/iparty_djs/" target="_blank" rel="noopener noreferrer" className="social-link">Instagram</a>
+          <a href="https://wa.me/527775102313" target="_blank" rel="noopener noreferrer" className="social-link">WhatsApp</a>
         </div>
       </div>
     </footer>
