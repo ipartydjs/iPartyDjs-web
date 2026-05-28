@@ -54,15 +54,15 @@ const Contact = () => {
             <div className="contact-item">
               <span className="contact-icon">◈</span>
               <div>
-                <span className="contact-label">WhatsApp</span>
+                <a href="https://wa.me/527775102313" target="_blank" rel="noopener noreferrer" className="contact-label">WhatsApp</a>
                 <span className="contact-value">+52 777 510 23 13</span>
               </div>
             </div>
             <div className="contact-item">
               <span className="contact-icon">✦</span>
               <div>
-                <span className="contact-label">Instagram</span>
-                <span className="contact-value">@ipartydjs</span>
+              <a href="https://www.instagram.com/iparty_djs/" target="_blank" rel="noopener noreferrer" className="contact-label">Instagram</a>
+                <span className="contact-value">iparty_djs</span>
               </div>
             </div>
           </div>
