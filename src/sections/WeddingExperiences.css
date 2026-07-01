@@ -18,31 +18,7 @@
   margin: 0 auto 4rem;
 }
 
-.we-header__eyebrow {
-  display: inline-block;
-  font-family: 'Montserrat', sans-serif;
-  font-size: 0.7rem;
-  font-weight: 600;
-  letter-spacing: 0.22em;
-  text-transform: uppercase;
-  color: var(--gold, #c9a14a);
-  margin-bottom: 1.25rem;
-  position: relative;
-}
 
-.we-header__eyebrow::before,
-.we-header__eyebrow::after {
-  content: '';
-  position: absolute;
-  top: 50%;
-  width: 1.5rem;
-  height: 1px;
-  background: var(--gold, #c9a14a);
-  opacity: 0.5;
-}
-
-.we-header__eyebrow::before { left: -2rem; }
-.we-header__eyebrow::after { right: -2rem; }
 
 .we-header__title {
   font-family: 'Cormorant Garamond', serif;
