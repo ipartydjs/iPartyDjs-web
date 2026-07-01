@@ -10,6 +10,7 @@ import Process from './sections/Process';
 import Gallery from './sections/Gallery';
 import Contact from './sections/Contact';
 import './App.css';
+import WeddingExperiences from './sections/WeddingExperiences';
 
 function App() {
   useCursor();
@@ -29,6 +30,7 @@ function App() {
         <Hero />
         <Marquee />
         <Services />
+        <WeddingExperiences />
         <Stats />
         <Process />
         <Gallery />
