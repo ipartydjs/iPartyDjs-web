@@ -18,7 +18,7 @@
   margin: 0 auto 4rem;
 }
 
-.we-header__eyebrow {
+/* .we-header__eyebrow {
   display: inline-block;
   font-family: 'Montserrat', sans-serif;
   font-size: 0.7rem;
@@ -28,7 +28,7 @@
   color: var(--gold, #c9a14a);
   margin-bottom: 1.25rem;
   position: relative;
-}
+} */
 
 .we-header__eyebrow::before,
 .we-header__eyebrow::after {

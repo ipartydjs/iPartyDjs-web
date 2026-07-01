@@ -26,7 +26,7 @@ const cards: ExperienceCard[] = [
       'DJ & Consola Musical de alta calidad, Diseño Sonoro Personalizado y Coordinación de Momentos Clave. Ideal para toda boda que busca una pista llena de energía y ritmo.',
     features: [
       'DJ & Consola Musical',
-      'Audio DBX, Lacrosse o DBL',
+      'Audio D&B, RCF o Nexo',
       'Diseño Sonoro Personalizado',
       'Coordinación de Momentos Clave',
       'Hasta 250 invitados',
@@ -178,7 +178,6 @@ export default function WeddingExperiences() {
           animate={headerInView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
         >
-          <span className="we-header__eyebrow">Lo que ofrecemos</span>
           <h2 className="we-header__title">
             Experiencias de
             <br />
