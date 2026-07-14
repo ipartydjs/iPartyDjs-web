@@ -35,7 +35,7 @@ const Footer = () => {
           </div>
           <div className="footer-col">
             <span className="footer-col-title">Acceso</span>
-            <a href="/login">Iniciar sesión</a>
+            <a href="/Login">Iniciar sesión</a>
             <a href="/registro">Registrarse</a>
             <a href="/admin">Administración</a>
           </div>

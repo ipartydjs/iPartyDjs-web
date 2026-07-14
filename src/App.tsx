@@ -1,43 +1,18 @@
-import { useEffect } from 'react';
-import { useCursor } from './hooks/useCursor';
-import Navbar from './components/Navbar';
-import Marquee from './components/Marquee';
-import Footer from './components/Footer';
-import Hero from './sections/Hero';
-import Services from './sections/Services';
-import Stats from './sections/Stats';
-import Process from './sections/Process';
-import Gallery from './sections/Gallery';
-import Contact from './sections/Contact';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import Home from './pages/Home/Home';
+import Login from './pages/Login/Login';
+import Register from './pages/Register/Register';
 import './App.css';
-import WeddingExperiences from './sections/WeddingExperiences';
 
 function App() {
-  useCursor();
-
-  useEffect(() => {
-    document.title = 'iPartyDJs — Producción & Coordinación de Eventos';
-  }, []);
-
   return (
-    <>
-      {/* Custom cursor */}
-      <div className="cursor" />
-      <div className="cursor-follower" />
-
-      <Navbar />
-      <main>
-        <Hero />
-        <Marquee />
-        <Services />
-        <WeddingExperiences />
-        <Stats />
-        <Process />
-        <Gallery />
-        <Contact />
-      </main>
-      <Footer />
-    </>
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/registro" element={<Register />} />
+      </Routes>
+    </BrowserRouter>
   );
 }
 
