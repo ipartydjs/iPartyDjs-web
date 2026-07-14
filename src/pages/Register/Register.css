@@ -20,6 +20,7 @@
 
 /* ── Header ── */
 .register-eyebrow {
+  text-align: center;
   display: block;
   font-size: 0.6rem;
   font-weight: 600;
@@ -30,6 +31,7 @@
 }
 
 .register-title {
+  text-align: center;
   font-family: 'Cormorant Garamond', serif;
   font-size: 2.4rem;
   font-weight: 400;
@@ -39,6 +41,7 @@
 }
 
 .register-subtitle {
+  text-align: center;
   font-size: 0.75rem;
   font-weight: 300;
   color: rgba(245, 240, 232, 0.55);
@@ -48,6 +51,7 @@
 /* ── Step indicator ── */
 .step-indicator {
   display: flex;
+  justify-content: center;
   gap: 6px;
   margin-bottom: 36px;
 }

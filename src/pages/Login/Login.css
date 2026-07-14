@@ -12,7 +12,11 @@
 /* ── Card ── */
 .login-card {
   width: 100%;
-  max-width: 520px;
+  max-width: 860px;
+  background: #111111;
+  border: 1px solid rgba(201, 168, 76, 0.12);
+  padding: 52px 56px;  width: 100%;
+  max-width: 860px;
   background: #111111;
   border: 1px solid rgba(201, 168, 76, 0.12);
   padding: 52px 48px;
