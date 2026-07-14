@@ -1,55 +1,71 @@
 import { useState } from 'react';
 import './Login.css';
+import { LoginSchema, type LoginInput } from '@ipartydjs/shared'; // Asegúrate que el tipo también se importe
+import { useNavigate } from 'react-router-dom';
 
 const Login = () => {
-  const [form, setForm] = useState({ correo: '', password: '' });
+  const navigate = useNavigate();
+  const [form, setForm] = useState<LoginInput>({
+    email: '',
+    password: '',
+  });
+
   const [touched, setTouched] = useState<Record<string, boolean>>({});
   const [submitted, setSubmitted] = useState(false);
   const [authError, setAuthError] = useState(false);
- // const [resetSent, setResetSent] = useState(false);
 
-  const errors = {
-    correo: !form.correo
-      ? 'Campo requerido'
-      : !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.correo)
-      ? 'Correo electrónico inválido'
-      : '',
-    password: !form.password ? 'Campo requerido' : '',
-  };
+  // ====================== VALIDACIÓN CON ZOD ======================
+  const validation = LoginSchema.safeParse(form);
 
-  const showError = (field: string) =>
-    (touched[field] || submitted) && errors[field as keyof typeof errors];
+  const errors = validation.success
+    ? {}
+    : Object.fromEntries(
+        validation.error.issues.map((issue) => [
+          issue.path[0] as keyof LoginInput,
+          issue.message,
+        ])
+      );
+
+  const showError = (field: keyof LoginInput) =>{
+    console.log('touched:', touched, 'submitted:', submitted, 'errors:', errors);
+    return (touched[field] || submitted) && errors[field];
+  }
+    
+
+  // ================================================================
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
+    setForm((prev) => ({
+      ...prev,
+      [e.target.name]: e.target.value,
+    }));
     setAuthError(false);
   };
 
-  const handleBlur = (field: string) =>
+  const handleBlur = (field: keyof LoginInput) => {
     setTouched((prev) => ({ ...prev, [field]: true }));
+  };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     setSubmitted(true);
-    const hasErrors = Object.values(errors).some(Boolean);
-    if (!hasErrors) {
-      // Simula error de autenticación para demo
-      setAuthError(true);
-    }
-  };
 
-//   const handleReset = () => {
-//     setResetSent(true);
-//     setTimeout(() => setResetSent(false), 3000);
-//   };
+    if (!validation.success) {
+      return; // No continuar si hay errores de validación
+    }
+
+    // Aquí iría tu lógica real de login (API call)
+    console.log('Intentando login con:', form);
+    navigate('/dashboard'); // Simulación de redirección
+    setAuthError(true); // Simulación actual
+  };
 
   return (
     <div className="login-page">
       <div className="login-card">
-
         {/* Header */}
         <div className="login-header">
-          <span className="login-eyebrow">Bienvinido</span>
+          <span className="login-eyebrow">Bienvenido</span>
           <h1 className="login-title">Iniciar sesión</h1>
           <p className="login-subtitle">
             Ingresa tus datos para acceder a tu panel personal.
@@ -58,23 +74,22 @@ const Login = () => {
 
         {/* Form */}
         <form className="login-form" onSubmit={handleSubmit} noValidate>
-
           {/* Correo */}
-          <div className={`field ${showError('correo') || authError ? 'has-error' : ''}`}>
-            <label htmlFor="correo">
+          <div className={`field ${showError('email') || authError ? 'has-error' : ''}`}>
+            <label htmlFor="email">
               Correo electrónico <span className="required">*</span>
             </label>
             <input
-              id="correo"
-              name="correo"
+              id="email"
+              name="email"
               type="email"
               placeholder="usuario@ejemplo.com"
-              value={form.correo}
+              value={form.email}
               onChange={handleChange}
-              onBlur={() => handleBlur('correo')}
+              onBlur={() => handleBlur('email')}
               autoComplete="email"
             />
-            {showError('correo') && !authError && (
+            {showError('email') && !authError && (
               <span className="error-msg">{errors.correo}</span>
             )}
           </div>
@@ -85,7 +100,7 @@ const Login = () => {
               <label htmlFor="password">
                 Contraseña <span className="required">*</span>
               </label>
-           {/* <a href="/recuperar" className="forgot-link">¿Olvidaste tu contraseña?</a> */}
+              {/* <a href="/recuperar" className="forgot-link">¿Olvidaste tu contraseña?</a> */}
             </div>
             <input
               id="password"
@@ -114,21 +129,6 @@ const Login = () => {
           <button type="submit" className="btn-login">
             Iniciar sesión
           </button>
-
-{/*        
-         <div className="separator">
-            <span>o</span>
-          </div>
-          {/* Reset password 
-          <button
-            type="button"
-            className="btn-reset"
-            onClick={handleReset}
-          >
-            {resetSent ? '¡Correo enviado! Revisa tu bandeja' : 'Restablecer contraseña por correo'}
-          </button> 
-       */}
-
         </form>
 
         {/* Register link */}
@@ -136,7 +136,6 @@ const Login = () => {
           ¿Aún no tienes cuenta?{' '}
           <a href="/registro" className="link-gold">Regístrate gratis</a>
         </p>
-
       </div>
     </div>
   );

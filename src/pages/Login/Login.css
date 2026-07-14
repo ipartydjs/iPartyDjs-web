@@ -1,26 +1,39 @@
 /* ── Page wrapper ── */
 .login-page {
   min-height: 100vh;
-  background: #0d0d0d;
   display: flex;
   align-items: center;
   justify-content: center;
   padding: 40px 16px;
   font-family: 'Montserrat', sans-serif;
+    position: relative;
+  background: 
+    linear-gradient(rgba(0, 0, 0, 0.60), rgba(0, 0, 0, 0.60)),
+    url('/patron_marmol_oro2.png.png') center / cover no-repeat;
+  background-color: #0d0d0d;
+} 
+
+
+.login-page::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.75);
+  z-index: 0;
 }
 
 /* ── Card ── */
 .login-card {
   width: 100%;
-  max-width: 860px;
-  background: #111111;
-  border: 1px solid rgba(201, 168, 76, 0.12);
-  padding: 52px 56px;  width: 100%;
-  max-width: 860px;
+  max-width: 520px;
   background: #111111;
   border: 1px solid rgba(201, 168, 76, 0.12);
   padding: 52px 48px;
+  position: relative;
+  z-index: 1;
 }
+
+
 
 /* ── Header ── */
 .login-eyebrow {

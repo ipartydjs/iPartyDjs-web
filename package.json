@@ -13,6 +13,7 @@
   "dependencies": {
     "@imagekit/react": "^5.0.2",
     "@ipartydjs/shared": "^7.1.1",
+    "lucide-react": "^1.24.0",
     "motion": "^12.42.2",
     "react": "^19.2.6",
     "react-dom": "^19.2.6",

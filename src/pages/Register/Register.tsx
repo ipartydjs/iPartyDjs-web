@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import './Register.css';
+import { RegisterClientSchema, type RegisterClientInput } from '@ipartydjs/shared';
 
 type PasswordStrength = 'weak' | 'medium' | 'strong' | '';
 
@@ -30,65 +31,62 @@ const strengthColor: Record<PasswordStrength, string> = {
 };
 
 const Register = () => {
-  const [form, setForm] = useState({
+  const [form, setForm] = useState<RegisterClientInput>({
     nombre: '',
     apellido: '',
-    telefono: '',
-    correo: '',
+    email: '',
     password: '',
     confirmPassword: '',
-    terms: false,
   });
 
-  const [touched, setTouched] = useState<Record<string, boolean>>({});
+  const [touched, setTouched] = useState<Record<keyof RegisterClientInput, boolean>>({
+    nombre: false,
+    apellido: false,
+    email: false,
+    password: false,
+    confirmPassword: false,
+  });
+
   const [submitted, setSubmitted] = useState(false);
 
   const passwordStrength = getPasswordStrength(form.password);
 
-  const errors = {
-    nombre: !form.nombre ? 'Campo requerido' : '',
-    apellido: !form.apellido ? 'Campo requerido' : '',
-    correo: !form.correo
-      ? 'Campo requerido'
-      : !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.correo)
-      ? 'Correo electrónico inválido'
-      : '',
-    password: !form.password ? 'Campo requerido' : '',
-    confirmPassword:
-      !form.confirmPassword
-        ? 'Campo requerido'
-        : form.confirmPassword !== form.password
-        ? 'Debe coincidir con la contraseña anterior'
-        : '',
-    terms: !form.terms ? 'Debes aceptar los términos' : '',
-  };
+  // ====================== VALIDACIÓN CON ZOD ======================
+  const validation = RegisterClientSchema.safeParse(form);
+
+  const errors = validation.success
+    ? {}
+    : Object.fromEntries(
+        validation.error.issues.map((issue) => [
+          issue.path[0] as keyof RegisterClientInput,
+          issue.message,
+        ])
+      );
+  // ================================================================
+
+  const showError = (field: keyof RegisterClientInput) =>
+    (touched[field] || submitted) && !!errors[field];
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value, type, checked } = e.target;
-    setForm((prev) => ({ ...prev, [name]: type === 'checkbox' ? checked : value }));
+    const { name, value } = e.target;
+    setForm((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleBlur = (field: string) => {
+  const handleBlur = (field: keyof RegisterClientInput) => {
     setTouched((prev) => ({ ...prev, [field]: true }));
-  };
-
-  const showError = (field: string) =>
-    (touched[field] || submitted) && errors[field as keyof typeof errors];
-
-  const strengthPercent: Record<PasswordStrength, number> = {
-    weak: 33,
-    medium: 66,
-    strong: 100,
-    '': 0,
   };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     setSubmitted(true);
-    const hasErrors = Object.values(errors).some(Boolean);
-    if (!hasErrors) {
-      alert('¡Cuenta creada exitosamente!');
+
+    if (!validation.success) {
+      return;
     }
+
+    // Aquí irá la llamada real al backend
+    console.log('Datos de registro:', form);
+    alert('¡Cuenta creada exitosamente! (Simulación)');
   };
 
   return (
@@ -112,7 +110,7 @@ const Register = () => {
 
         {/* Form */}
         <form className="register-form" onSubmit={handleSubmit} noValidate>
-          {/* Row 1 */}
+          {/* Row 1 - Nombre y Apellido */}
           <div className="form-row">
             <div className={`field ${showError('nombre') ? 'has-error' : ''}`}>
               <label htmlFor="nombre">
@@ -147,34 +145,21 @@ const Register = () => {
             </div>
           </div>
 
-
-          {/* <div className="field">
-            <label htmlFor="telefono">Teléfono</label>
-            <input
-              id="telefono"
-              name="telefono"
-              type="tel"
-              placeholder="777 123 4567"
-              value={form.telefono}
-              onChange={handleChange}
-            />
-          </div> */}
-
           {/* Correo */}
-          <div className={`field ${showError('correo') ? 'has-error' : ''}`}>
-            <label htmlFor="correo">
+          <div className={`field ${showError('email') ? 'has-error' : ''}`}>
+            <label htmlFor="email">
               Correo electrónico <span className="required">*</span>
             </label>
             <input
-              id="correo"
-              name="correo"
+              id="email"
+              name="email"
               type="email"
               placeholder="maria.gonzalez@gmail.com"
-              value={form.correo}
+              value={form.email}
               onChange={handleChange}
-              onBlur={() => handleBlur('correo')}
+              onBlur={() => handleBlur('email')}
             />
-            {showError('correo') && <span className="error-msg">{errors.correo}</span>}
+            {showError('email') && <span className="error-msg">{errors.email}</span>}
           </div>
 
           {/* Password */}
@@ -197,7 +182,7 @@ const Register = () => {
                   <div
                     className="strength-fill"
                     style={{
-                      width: `${strengthPercent[passwordStrength]}%`,
+                      width: `${passwordStrength === 'weak' ? 33 : passwordStrength === 'medium' ? 66 : 100}%`,
                       background: strengthColor[passwordStrength],
                     }}
                   />
@@ -210,9 +195,7 @@ const Register = () => {
                 </span>
               </div>
             )}
-            {showError('password') && !form.password && (
-              <span className="error-msg">{errors.password}</span>
-            )}
+            {showError('password') && <span className="error-msg">{errors.password}</span>}
           </div>
 
           {/* Confirm password */}
@@ -233,27 +216,6 @@ const Register = () => {
               <span className="error-msg">{errors.confirmPassword}</span>
             )}
           </div>
-
-          {/* Terms */}
-          {/* <div className={`field-checkbox ${showError('terms') ? 'has-error' : ''}`}>
-            <label className="checkbox-label">
-              <input
-                type="checkbox"
-                name="terms"
-                checked={form.terms}
-                onChange={handleChange}
-              />
-              <span className="custom-checkbox" />
-              <span className="checkbox-text">
-                Acepto los{' '}
-                <a href="#" className="link-gold">Términos y condiciones</a>
-                {' '}y la{' '}
-                <a href="#" className="link-gold">Política de privacidad</a>
-                {' '}de iParty DJs.
-              </span>
-            </label>
-            {showError('terms') && <span className="error-msg">{errors.terms}</span>}
-          </div> */}
 
           {/* Submit */}
           <button type="submit" className="btn-register">
