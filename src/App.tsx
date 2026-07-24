@@ -1,43 +1,26 @@
-import { useEffect } from 'react';
-import { useCursor } from './hooks/useCursor';
-import Navbar from './components/Navbar';
-import Marquee from './components/Marquee';
-import Footer from './components/Footer';
-import Hero from './sections/Hero';
-import Services from './sections/Services';
-import Stats from './sections/Stats';
-import Process from './sections/Process';
-import Gallery from './sections/Gallery';
-import Contact from './sections/Contact';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import Home from './pages/Home/Home';
+import Login from './pages/Login/Login';
+import Register from './pages/Register/Register';
 import './App.css';
-import WeddingExperiences from './sections/WeddingExperiences';
+import { ClientDashboard } from './pages/Dashboard_Cliente/ClientDashboard';
+import EventRequest from './pages/EventRequest/EventRequest';
+import MySolicitudes from './pages/MySolicitudes/MySolicitudes';
+import MisCitas from './pages/MisCitas/MisCitas';
 
 function App() {
-  useCursor();
-
-  useEffect(() => {
-    document.title = 'iPartyDJs — Producción & Coordinación de Eventos';
-  }, []);
-
   return (
-    <>
-      {/* Custom cursor */}
-      <div className="cursor" />
-      <div className="cursor-follower" />
-
-      <Navbar />
-      <main>
-        <Hero />
-        <Marquee />
-        <Services />
-        <WeddingExperiences />
-        <Stats />
-        <Process />
-        <Gallery />
-        <Contact />
-      </main>
-      <Footer />
-    </>
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/registro" element={<Register />} />
+        <Route path="/dashboard" element={<ClientDashboard />} />
+        <Route path="/EventRequest" element={<EventRequest />} />
+        <Route path="/MySolicitudes" element={<MySolicitudes />} />
+       <Route path="/Mis-Citas" element={<MisCitas />} />
+      </Routes>
+    </BrowserRouter>
   );
 }
 

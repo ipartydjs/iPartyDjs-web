@@ -12,9 +12,13 @@
   },
   "dependencies": {
     "@imagekit/react": "^5.0.2",
+    "@ipartydjs/shared": "^7.1.1",
+    "jotai": "^2.20.1",
+    "lucide-react": "^1.24.0",
     "motion": "^12.42.2",
     "react": "^19.2.6",
-    "react-dom": "^19.2.6"
+    "react-dom": "^19.2.6",
+    "react-router-dom": "^7.18.1"
   },
   "devDependencies": {
     "@babel/core": "^7.29.0",
@@ -32,6 +36,7 @@
     "globals": "^17.6.0",
     "typescript": "~6.0.2",
     "typescript-eslint": "^8.59.2",
-    "vite": "^8.0.12"
+    "vite": "^8.0.12",
+    "vite-tsconfig-paths": "^6.1.1"
   }
 }
