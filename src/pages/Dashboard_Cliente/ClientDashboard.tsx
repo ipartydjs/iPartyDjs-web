@@ -1,5 +1,6 @@
 import React from 'react';
 import './ClientDashboard.css';
+import { Link } from 'react-router-dom';
 
 export const ClientDashboard: React.FC = () => {
   return (
@@ -14,11 +15,11 @@ export const ClientDashboard: React.FC = () => {
         <div className="sidebar-section">
           <p className="section-title">PANEL CLIENTE</p>
           <nav className="sidebar-nav">
-            <a href="#inicio" className="nav-item active">Inicio</a>
-            <a href="#nueva-solicitud" className="nav-item">Nueva solicitud</a>
-            <a href="#mis-solicitudes" className="nav-item">Mis solicitudes</a>
-            <a href="#mis-citas" className="nav-item">Mis citas</a>
-            <a href="#mis-reseñas" className="nav-item">Mis reseñas</a>
+            <Link to="/dashboard" className="nav-item"> Inicio </Link>
+            <Link to="/EventRequest" className="nav-item"> Nueva solicitud </Link>
+            <Link to="/MySolicitudes" className="nav-item">Mis solicitudes</Link>
+            <Link to="/Mis-Citas" className="nav-item">Mis citas</Link>
+            <Link to="/mis-reseñas" className="nav-item">Mis reseñas</Link>
           </nav>
         </div>
 
