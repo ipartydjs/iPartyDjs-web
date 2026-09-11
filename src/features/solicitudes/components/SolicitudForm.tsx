@@ -8,14 +8,7 @@ import {
     type CreateSolicitudInput,
     type TipoEvento,
 } from "@ipartydjs/shared";
-
-const TIPO_EVENTO_OPTIONS: { value: TipoEvento; label: string }[] = [
-    { value: "boda", label: "Boda" },
-    { value: "xv_anos", label: "XV Años" },
-    { value: "cumpleanos", label: "Cumpleaños" },
-    { value: "corporativo", label: "Corporativo" },
-    { value: "otro", label: "Otro" },
-];
+import { ButtonForm, Input, Select } from "@/shared/ui";
 
 interface SolicitudFormInitialData {
     fecha_deseada?: string; // llega como ISO string desde SolicitudEventoDTO
@@ -76,57 +69,61 @@ export function SolicitudForm({
             onSubmit={handleSubmit(onSubmit)}
             noValidate
         >
-            <div className="form-field">
-                <label htmlFor="fecha_deseada">Fecha deseada</label>
-                <input
-                    id="fecha_deseada"
-                    type="date"
-                    {...register("fecha_deseada", { valueAsDate: true })}
-                />
-                {errors.fecha_deseada && (
-                    <span className="field-error">
-                        {errors.fecha_deseada.message}
-                    </span>
-                )}
-            </div>
-            <br />
-
-            <div className="form-field">
-                <label htmlFor="direccion">Dirección</label>
-                <textarea id="direccion" rows={3} {...register("direccion")} />
-                {errors.direccion && (
-                    <span className="field-error">
-                        {errors.direccion.message}
-                    </span>
-                )}
-            </div>
-            <br />
-
-            <div className="form-field">
-                <label htmlFor="tipo_evento">Tipo de evento</label>
-                <select id="tipo_evento" {...register("tipo_evento")}>
-                    {TIPO_EVENTO_OPTIONS.map((opt) => (
-                        <option key={opt.value} value={opt.value}>
-                            {opt.label}
-                        </option>
-                    ))}
-                </select>
-                {errors.tipo_evento && (
-                    <span className="field-error">
-                        {errors.tipo_evento.message}
-                    </span>
-                )}
+            <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
+                <div className="flex flex-col gap-2">
+                    <Input
+                        label="Fecha deseada del evento"
+                        type="date"
+                        {...register("fecha_deseada", { valueAsDate: true })}
+                    />
+                </div>
+                <div className="flex flex-col gap-2">
+                    <Select
+                        label="Tipo de evento"
+                        {...register("tipo_evento")}
+                        options={[
+                            { label: "Boda", value: "boda" },
+                            {
+                                label: "XV Años",
+                                value: "xv_anos",
+                            },
+                            {
+                                label: "Cumpleaños",
+                                value: "cumpleanos",
+                            },
+                            {
+                                label: "Corporativo",
+                                value: "corporativo",
+                            },
+                            {
+                                label: "Otro",
+                                value: "otro",
+                            },
+                        ]}
+                        error={errors.tipo_evento?.message}
+                        required
+                    />
+                </div>
             </div>
 
             <br />
+            <Input
+                label="Dirección deseada del evento"
+                type="text"
+                {...register("direccion", { valueAsDate: true })}
+                error={errors.direccion?.message}
+            />
+            <br />
 
-            <button type="submit" className="btn-gold" disabled={isLoading}>
+            <br />
+
+            <ButtonForm type="submit" disabled={isLoading} className="w-full">
                 {isLoading
                     ? "Guardando..."
                     : mode === "crear"
                       ? "Crear solicitud"
                       : "Actualizar solicitud"}
-            </button>
+            </ButtonForm>
         </form>
     );
 }

@@ -1,4 +1,4 @@
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, Navigate } from "react-router-dom";
 
 import GuestLayout from "@/layouts/GuestLayout";
 import DashboardLayout from "@/layouts/DashboardLayout";
@@ -9,7 +9,6 @@ import Register from "@/features/auth/pages/Register";
 import { ClientDashboard } from "@/features/dashboards/pages/ClientDashboard";
 import ReviewForm from "./features/resenias/Reviewform";
 import Profile from "./features/profile/pages/profile";
-import AdminLogin from "./features/auth/admin/Adminlogin";
 import AdminUsersDashboard from "./features/dashboards/pages/Adminuserdashboard";
 import AdminPhotosGallery from "./features/auth/admin/AdminPhotosGallery";
 import RequireAdminAuth from "./features/auth/admin/RequireAdminAuth";
@@ -48,8 +47,6 @@ function App() {
                     <Route path="/login" element={<Login />} />
                     <Route path="/register" element={<Register />} />
                     <Route path="/registro" element={<Register />} />
-                    <Route path="/admin" element={<AdminLogin />} />
-                    <Route path="/admin/login" element={<AdminLogin />} />
                 </Route>
 
                 {/* Rutas privadas — panel CLIENTE */}
@@ -151,6 +148,7 @@ function App() {
                         </RequireAdminAuth>
                     }
                 />
+                <Route path="*" element={<Navigate to="/" replace />} />
             </Routes>
         </>
     );

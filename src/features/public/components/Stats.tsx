@@ -37,10 +37,10 @@ const StatItem = ({
 }) => {
     const count = useCounter(value, active);
     return (
-        <div className="rounded-2xl border border-white/10 bg-white/5 p-6 text-center shadow-[0_20px_60px_rgba(15,23,42,0.28)] backdrop-blur-sm transition-transform duration-300 hover:-translate-y-1 md:p-8">
-            <div className="flex items-end justify-center gap-1 text-4xl font-black tracking-tight text-white md:text-5xl">
+        <div className="rounded-2xl border border-white/10 bg-white/5 p-6 text-center shadow-[0_20px_60px_rgba(15,23,42,0.28)] backdrop-blur-sm duration-300 md:p-8">
+            <div className="flex items-end justify-center gap-1 text-4xl font-display tracking-tight text-white md:text-5xl">
                 <span className="text-gold">{count}</span>
-                <span className="pb-1 text-base text-slate-300 md:text-lg">
+                <span className="pb-1 font-body text-base text-slate-300 md:text-lg">
                     {suffix}
                 </span>
             </div>
@@ -70,10 +70,10 @@ const Stats = () => {
         <section
             ref={ref}
             className="
-        relative overflow-hidden
-        bg-surface
-        bg-[radial-gradient(ellipse_60%_50%_at_0%_0%,color-mix(in_srgb,var(--color-gold)_14%,transparent),transparent_70%),radial-gradient(ellipse_60%_50%_at_100%_0%,color-mix(in_srgb,var(--color-gold-light)_12%,transparent),transparent_70%)]
-        p-8 text-cream"
+            relative overflow-hidden
+            bg-surface
+            bg-[radial-gradient(ellipse_60%_50%_at_0%_0%,color-mix(in_srgb,var(--color-gold)_14%,transparent),transparent_70%),radial-gradient(ellipse_60%_50%_at_100%_0%,color-mix(in_srgb,var(--color-gold-light)_12%,transparent),transparent_70%)]
+            p-8 text-cream"
         >
             <div className="mx-auto grid max-w-6xl gap-6 px-4 sm:grid-cols-2 lg:grid-cols-3">
                 {stats.map((s) => (

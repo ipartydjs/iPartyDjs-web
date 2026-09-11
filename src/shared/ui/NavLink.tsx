@@ -18,7 +18,7 @@ export default function NavLink({
             key={label}
             href={href}
             onClick={onClick}
-            className="-mx-3 block rounded-lg px-3 py-3 font-body text-base font-semibold tracking-wide uppercase text-cream hover:bg-gold/10 hover:text-gold"
+            className="-mx-3 block rounded-lg px-3 py-3 font-body text-[0.85rem] font-semibold tracking-wide uppercase text-cream hover:bg-gold/10 hover:text-gold"
         >
             {label}
         </a>

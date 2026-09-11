@@ -2,7 +2,7 @@ import { forwardRef, type ComponentPropsWithoutRef } from "react";
 import { cn } from "./cn";
 
 export const inputClasses =
-    "w-full border border-white/8 bg-surface-1 px-4 py-3.5 font-body text-[0.78rem] font-light text-cream placeholder:text-cream/25 outline-none transition-colors duration-300 focus:border-gold focus:bg-surface-2 disabled:cursor-not-allowed disabled:opacity-60";
+    "w-full border border-white/8 bg-input-normal px-4 py-3.5 font-body text-[0.78rem] font-light text-cream placeholder:text-cream/25 outline-none transition-colors duration-300 focus:border-gold focus:bg-input-focus disabled:cursor-not-allowed disabled:opacity-60";
 
 export const labelClasses =
     "text-[0.6rem] tracking-[0.2em] uppercase text-gold";
@@ -25,6 +25,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(function Input(
         id,
         className,
         type,
+        onClick,
         ...props
     },
     ref,
@@ -36,6 +37,14 @@ const Input = forwardRef<HTMLInputElement, InputProps>(function Input(
         type === "date"
             ? "scheme-dark [&::-webkit-calendar-picker-indicator]:brightness-125 [&::-webkit-calendar-picker-indicator]:sepia [&::-webkit-calendar-picker-indicator]:saturate-200 [&::-webkit-calendar-picker-indicator]:hue-rotate-5"
             : undefined;
+
+    const handleClick = (event: React.MouseEvent<HTMLInputElement>) => {
+        if (type === "date") {
+            event.currentTarget.showPicker?.();
+        }
+
+        onClick?.(event);
+    };
 
     return (
         <div className={cn("flex flex-col gap-2", containerClassName)}>
@@ -53,6 +62,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(function Input(
                 ref={ref}
                 type={type}
                 className={cn(
+                    "bg-surface-1",
                     inputClasses,
                     dateExtra,
                     error && "border-danger focus:border-danger",
@@ -60,6 +70,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(function Input(
                 )}
                 aria-invalid={Boolean(error) || (props as any)["aria-invalid"]}
                 {...(props as any)}
+                onClick={handleClick}
             />
 
             {error ? (

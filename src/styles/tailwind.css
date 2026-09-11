@@ -5,9 +5,12 @@
     --color-gold-light: #f2aa4c;
     --color-gold-dark: #8b6914;
     --color-surface: #110e16;
+    --color-on-surface: #151316;
     --color-surface-soft: #111111;
-    --color-surface-1: #161616;
-    --color-surface-2: #1e1e1e;
+    --color-input-normal: #18141e;
+    --color-input-focus: #110e16;
+    --color-surface-1: #191922;
+    --color-surface-2: #282426;
     --color-surface-3: #2a2a2a;
     --color-cream: #f5f0e8;
     --color-cream-dim: rgba(245, 240, 232, 0.7);

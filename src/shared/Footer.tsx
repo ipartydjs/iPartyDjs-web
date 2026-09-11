@@ -17,7 +17,6 @@ const eventLinks = [
 const accessLinks = [
     { label: "Iniciar sesión", href: "/login" },
     { label: "Registrarse", href: "/register" },
-    { label: "Administración", href: "/admin" },
 ];
 
 const FooterColumn = ({

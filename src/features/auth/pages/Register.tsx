@@ -6,7 +6,7 @@ import {
 import { useNavigate } from "react-router-dom";
 import { useRegister } from "@/features/auth/hooks/useAuth";
 import Overline from "@/shared/ui/Overline";
-import { Button, ButtonForm, Input } from "@/shared/ui";
+import { Button, ButtonForm, DecorativeShape, Input } from "@/shared/ui";
 
 type PasswordStrength = "weak" | "medium" | "strong" | "";
 
@@ -116,6 +116,11 @@ const Register = () => {
 
     return (
         <section className="relative isolate overflow-hidden bg-surface px-6 pt-14 lg:px-8">
+            <DecorativeShape
+                kind="blob"
+                className="absolute inset-x-0 -top-40 -z-10 transform-gpu overflow-hidden blur-3xl sm:-top-80"
+                innerClassName="relative left-[calc(50%-11rem)] aspect-1155/678 w-144.5 -translate-x-1/2 rotate-30 bg-linear-to-tr from-gold-dark to-gold opacity-20 sm:left-[calc(50%-30rem)] sm:w-288.75"
+            />
             <div className="mx-auto max-w-3xl py-32 sm:py-48 lg:py-56">
                 {/* Header */}
                 <div className="text-center">
@@ -136,12 +141,12 @@ const Register = () => {
 
                 {/* Form */}
                 <form
-                    className="register-form"
+                    className="flex flex-col gap-5"
                     onSubmit={handleSubmit}
                     noValidate
                 >
                     {/* Row 1 - Nombre y Apellido */}
-                    <div className="form-row">
+                    <div className="grid gap-5 sm:grid-cols-2">
                         <Input
                             label="Nombre"
                             name="nombre"
@@ -198,14 +203,12 @@ const Register = () => {
                         error={showError("password") ? errors.password : ""}
                         required
                     />
-                    <div
-                        className={`field ${showError("password") ? "has-error" : ""}`}
-                    >
+                    <div className="mt-1 flex flex-col gap-2">
                         {form.password && (
-                            <div className="strength-wrapper">
-                                <div className="strength-bar">
+                            <div className="mt-1 flex flex-col gap-1.5">
+                                <div className="h-1.5 overflow-hidden rounded-xs bg-white/10">
                                     <div
-                                        className="strength-fill"
+                                        className="h-full rounded-xs transition-[width,background-color] duration-400"
                                         style={{
                                             width: `${passwordStrength === "weak" ? 33 : passwordStrength === "medium" ? 66 : 100}%`,
                                             background:
@@ -214,7 +217,7 @@ const Register = () => {
                                     />
                                 </div>
                                 <span
-                                    className="strength-label"
+                                    className="text-[0.62rem] font-medium"
                                     style={{
                                         color: strengthColor[passwordStrength],
                                     }}
@@ -224,7 +227,9 @@ const Register = () => {
                             </div>
                         )}
                         {showError("password") && (
-                            <span className="error-msg">{errors.password}</span>
+                            <span className="mt-1 text-[0.64rem] font-normal text-danger">
+                                {errors.password}
+                            </span>
                         )}
                     </div>
 

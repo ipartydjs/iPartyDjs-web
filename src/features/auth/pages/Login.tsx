@@ -3,8 +3,9 @@ import { LoginSchema, type LoginInput } from "@ipartydjs/shared";
 import { useNavigate } from "react-router-dom";
 import { useLogin } from "@/features/auth/hooks/useAuth";
 import axios from "axios";
-import { Button, ButtonForm, Input } from "@/shared/ui";
+import { Button, ButtonForm, DecorativeShape, Input } from "@/shared/ui";
 import Overline from "@/shared/ui/Overline";
+import { useAuthStore } from "@/core/stores/auth.store";
 
 const Login = () => {
     const navigate = useNavigate();
@@ -62,7 +63,15 @@ const Login = () => {
 
         loginMutation.mutate(form, {
             onSuccess: () => {
-                navigate("/dashboard");
+                const user = useAuthStore.getState().user;
+                const isAdmin =
+                    user?.rol === "administrador" ||
+                    user?.rol === "superadministrador" ||
+                    user?.rol === "colaborador_fotografico";
+
+                navigate(isAdmin ? "/dashboard/admin" : "/dashboard", {
+                    replace: true,
+                });
             },
             onError: (error: unknown) => {
                 let message = "Correo o contraseña incorrectos";
@@ -83,6 +92,11 @@ const Login = () => {
 
     return (
         <section className="relative isolate overflow-hidden bg-surface px-6 pt-14 lg:px-8">
+            <DecorativeShape
+                kind="blob"
+                className="absolute inset-x-0 -top-40 -z-10 transform-gpu overflow-hidden blur-3xl sm:-top-80"
+                innerClassName="relative left-[calc(50%-11rem)] aspect-1155/678 w-144.5 -translate-x-1/2 rotate-30 bg-linear-to-tr from-gold-dark to-gold opacity-20 sm:left-[calc(50%-30rem)] sm:w-288.75"
+            />
             <div className="mx-auto max-w-3xl py-32 sm:py-48 lg:py-56">
                 <div className="text-center">
                     <div className="mb-8 flex justify-center">
