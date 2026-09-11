@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import type { EstadoSolicitud, TipoEvento } from "@ipartydjs/shared";
 import { useMisSolicitudes } from "@/features/solicitudes/hooks/useSolicitudes";
 import EditarSolicitud from "./EditarSolicitud";
+import { ButtonNavigate } from "@/shared/ui";
 
 const ESTADO_OPTIONS: EstadoSolicitud[] = [
     "pendiente",
@@ -43,19 +44,20 @@ export default function MisSolicitudes() {
     const navigate = useNavigate();
 
     return (
-        <div className="mc-main">
-            <header className="step-header">
-                <h1>Mis solicitudes</h1>
-                <button
-                    className="btn-gold"
+        <div className="mx-auto max-w-3xl">
+            <header className="text-center place-content-between flex flex-row">
+                <h1 className="font-display text-3xl font-normal text-balance text-cream sm:text-5xl">
+                    Mis solicitudes
+                </h1>
+                <ButtonNavigate
                     onClick={() => navigate("/dashboard/solicitudes/nueva")}
                 >
                     Nueva solicitud
-                </button>
+                </ButtonNavigate>
             </header>
 
             <div
-                className="ms-filters"
+                className="ms-filters mt-4"
                 role="tablist"
                 aria-label="Filtros de estado"
             >

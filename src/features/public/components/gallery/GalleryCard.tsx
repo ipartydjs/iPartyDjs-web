@@ -1,5 +1,6 @@
 import clsx from "clsx";
 import GalleryRings from "./GalleryRings";
+import type { FotografiaDTO } from "@ipartydjs/shared";
 
 export type GalleryPhoto = {
     id_fotografia: string;
@@ -22,7 +23,7 @@ export const ASPECT_RATIOS = [
 ];
 
 type GalleryCardProps = {
-    photo: GalleryPhoto;
+    photo: FotografiaDTO;
     index: number;
     visible: boolean;
     dimState: "hovered" | "dimmed" | "idle";
@@ -64,13 +65,17 @@ export default function GalleryCard({
 
             <div className="absolute inset-x-0 bottom-0 flex translate-y-5 flex-col gap-1 p-6 opacity-0 transition-all duration-400 group-hover:translate-y-0 group-hover:opacity-100">
                 <span className="font-body text-[0.55rem] tracking-[0.3em] text-gold uppercase">
-                    {photo.tipo || "Evento iPartyDjs"}
-                </span>
-                <span className="font-display text-2xl text-cream">
                     {photo.titulo}
                 </span>
+                <span className="font-body text-2xl text-cream">
+                    {photo.descripcion || "Evento iPartyDjs"}
+                </span>
                 <span className="mt-2 font-body text-[0.65rem] tracking-widest text-gold">
-                    Ver evento →
+                    {new Date(photo.created_at).toLocaleDateString("es-ES", {
+                        day: "2-digit",
+                        month: "2-digit",
+                        year: "numeric",
+                    })}
                 </span>
             </div>
 

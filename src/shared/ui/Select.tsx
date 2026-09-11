@@ -14,7 +14,17 @@ type SelectProps = ComponentPropsWithoutRef<"select"> & {
 };
 
 const Select = forwardRef<HTMLSelectElement, SelectProps>(function Select(
-    { label, helperText, error, options = [], id, className, containerClassName, labelClassName, ...props },
+    {
+        label,
+        helperText,
+        error,
+        options = [],
+        id,
+        className,
+        containerClassName,
+        labelClassName,
+        ...props
+    },
     ref,
 ) {
     const resolvedId = id ?? (props as any).name;
@@ -22,7 +32,10 @@ const Select = forwardRef<HTMLSelectElement, SelectProps>(function Select(
     return (
         <div className={cn("flex flex-col gap-2", containerClassName)}>
             {label ? (
-                <label htmlFor={resolvedId} className={cn(labelClasses, labelClassName)}>
+                <label
+                    htmlFor={resolvedId}
+                    className={cn(labelClasses, labelClassName)}
+                >
                     {label}
                 </label>
             ) : null}
@@ -52,7 +65,9 @@ const Select = forwardRef<HTMLSelectElement, SelectProps>(function Select(
             {error ? (
                 <p className="font-body text-sm text-danger">{error}</p>
             ) : helperText ? (
-                <p className="font-body text-[0.68rem] text-cream-dim">{helperText}</p>
+                <p className="font-body text-[0.68rem] text-cream-dim">
+                    {helperText}
+                </p>
             ) : null}
         </div>
     );

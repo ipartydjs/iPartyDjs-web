@@ -1,14 +1,16 @@
 import { useRef, useEffect, useState } from "react";
-import { SectionHeader, MasonryGrid, Button } from "@/shared/ui";
-import GalleryCard, { type GalleryPhoto } from "./gallery/GalleryCard";
+import { SectionHeader, MasonryGrid } from "@/shared/ui";
+import GalleryCard from "./gallery/GalleryCard";
 import GallerySkeleton from "./gallery/GallerySkeleton";
+import { galeria } from "@/core/api/fotografiaApi";
+import type { FotografiaDTO } from "@ipartydjs/shared";
 
 const Gallery = () => {
     const sectionRef = useRef<HTMLElement>(null);
     const [visible, setVisible] = useState(false);
     const [hovered, setHovered] = useState<string | null>(null);
 
-    const [photos, setPhotos] = useState<GalleryPhoto[]>([]);
+    const [photos, setPhotos] = useState<FotografiaDTO[]>([]);
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
 
@@ -27,18 +29,7 @@ const Gallery = () => {
         const fetchGalleryPhotos = async () => {
             try {
                 setLoading(true);
-                const apiUrl =
-                    import.meta.env.VITE_API_URL || "http://localhost:4000/api";
-                const response = await fetch(`${apiUrl}/fotografias/publicas`);
-
-                if (!response.ok) {
-                    throw new Error(
-                        "Error al obtener las fotografías de la galería.",
-                    );
-                }
-
-                const result = await response.json();
-                const dataList = result.data || result;
+                const dataList = await galeria();
                 setPhotos(dataList);
             } catch (err: unknown) {
                 setError(
@@ -62,7 +53,7 @@ const Gallery = () => {
         <section
             id="galeria"
             ref={sectionRef}
-            className="bg-surface-1 px-6 py-24 lg:px-15 lg:py-35"
+            className="bg-on-surface px-6 py-24 lg:px-15 lg:py-35"
         >
             <SectionHeader
                 eyebrow="Galería"
@@ -110,12 +101,6 @@ const Gallery = () => {
                     )}
                 />
             )}
-
-            <div className="mt-15 text-center">
-                <Button href="#contacto" variant="outline" size="lg">
-                    Ver Todos los Eventos
-                </Button>
-            </div>
         </section>
     );
 };
