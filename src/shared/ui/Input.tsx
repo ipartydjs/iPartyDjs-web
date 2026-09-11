@@ -2,10 +2,9 @@ import { forwardRef, type ComponentPropsWithoutRef } from "react";
 import { cn } from "./cn";
 
 export const inputClasses =
-    "w-full border border-white/8 bg-input-normal px-4 py-3.5 font-body text-[0.78rem] font-light text-cream placeholder:text-cream/25 outline-none transition-colors duration-300 focus:border-gold focus:bg-input-focus disabled:cursor-not-allowed disabled:opacity-60";
+    "w-full border border-white/25 bg-input-normal px-4 py-3.5 font-body text-sm text-cream placeholder:text-cream/25 outline-none transition-colors duration-300 focus:border-gold focus:bg-input-focus disabled:cursor-not-allowed disabled:opacity-60";
 
-export const labelClasses =
-    "text-[0.6rem] tracking-[0.2em] uppercase text-gold";
+export const labelClasses = "text-xs tracking-[0.2em] uppercase text-gold";
 
 type InputProps = ComponentPropsWithoutRef<"input"> & {
     label?: string;

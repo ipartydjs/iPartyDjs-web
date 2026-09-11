@@ -137,7 +137,7 @@ export default function DashboardLayout() {
 
             <div className="flex min-h-screen">
                 <aside
-                    className={`fixed inset-y-0 left-0 z-40 flex w-72 flex-col border-r border-gold/15 bg-on-surface p-5 shadow-2xl backdrop-blur-xl transition-transform duration-300 lg:static lg:z-auto lg:w-72 lg:translate-x-0 lg:bg-surface lg:shadow-none ${
+                    className={`fixed inset-y-0 left-0 z-40 flex w-72 flex-col border-r border-gold/15 bg-on-surface p-5 shadow-2xl backdrop-blur-xl transition-transform duration-300 lg:fixed lg:z-auto lg:w-72 lg:translate-x-0 lg:bg-surface lg:shadow-none lg:h-screen ${
                         mobileMenuOpen ? "translate-x-0" : "-translate-x-full"
                     } lg:translate-x-0`}
                 >
@@ -244,7 +244,7 @@ export default function DashboardLayout() {
                     />
                 )}
 
-                <div className="flex-1 overflow-hidden">
+                <div className="flex-1 overflow-hidden lg:ml-72">
                     <main className="min-h-screen bg-surface px-10 py-10 lg:px-15 lg:py-15">
                         <Outlet />
                     </main>

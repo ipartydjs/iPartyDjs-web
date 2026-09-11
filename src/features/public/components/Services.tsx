@@ -1,43 +1,36 @@
 import Overline from "@/shared/ui/Overline";
-import { useEffect, useRef, useState } from "react";
+import { TextCard, type TextCardParams } from "@/shared/ui/TextCard";
+import { useRef } from "react";
 
-const services = [
+const services: TextCardParams[] = [
     {
-        icon: "♪",
+        value: "♪",
         title: "Dirección Musical",
-        desc: "Selección musical personalizada, DJ profesional y animación para cada momento de tu evento.",
+        description:
+            "Selección musical personalizada, DJ profesional y animación para cada momento de tu evento.",
     },
     {
-        icon: "◈",
+        value: "◈",
         title: "Diseño Sonoro",
-        desc: "Sistemas profesionales de audio, acústica y efectos sonoros de última generación.",
+        description:
+            "Sistemas profesionales de audio, acústica y efectos sonoros de última generación.",
     },
     {
-        icon: "✦",
+        value: "✦",
         title: "Diseño Visual",
-        desc: "Pantallas LED, iluminación arquitectónica robótica y ambientación visual completa.",
+        description:
+            "Pantallas LED, iluminación arquitectónica robótica y ambientación visual completa.",
     },
     {
-        icon: "◉",
+        value: "◉",
         title: "Producción Integral",
-        desc: "Coordinación total del evento: logística, montaje, contenido digital y efectos especiales.",
+        description:
+            "Coordinación total del evento: logística, montaje, contenido digital y efectos especiales.",
     },
 ];
 
 const Services = () => {
     const sectionRef = useRef<HTMLElement>(null);
-    const [visible, setVisible] = useState(false);
-
-    useEffect(() => {
-        const obs = new IntersectionObserver(
-            ([e]) => {
-                if (e.isIntersecting) setVisible(true);
-            },
-            { threshold: 0.2 },
-        );
-        if (sectionRef.current) obs.observe(sectionRef.current);
-        return () => obs.disconnect();
-    }, []);
 
     return (
         <section
@@ -64,29 +57,12 @@ const Services = () => {
 
             <div className="mx-auto mb-20 grid mt-10 max-w-6xl grid-cols-1 gap-0.5 md:grid-cols-2 xl:grid-cols-4">
                 {services.map((s, i) => (
-                    <div
-                        key={s.title}
-                        className={`group relative overflow-hidden bg-on-surface p-[52px_36px] text-left opacity-0 transition-all duration-700 hover:bg-input-normal ${
-                            visible
-                                ? "translate-y-0 opacity-100"
-                                : "translate-y-8 opacity-0"
-                        }`}
-                        style={{ transitionDelay: `${i * 150}ms` }}
-                    >
-                        <div className="absolute inset-0 bg-[linear-gradient(135deg,rgba(249,209,66,0.06),transparent_60%)] opacity-0 transition-opacity duration-400 group-hover:opacity-100" />
-                        <div className="relative z-10">
-                            <div className="mb-7 block text-4xl text-gold transition-transform duration-400 group-hover:scale-110">
-                                {s.icon}
-                            </div>
-                            <h3 className="mb-4 font-display text-[1.4rem] font-normal tracking-[0.02em] text-cream">
-                                {s.title}
-                            </h3>
-                            <p className=" font-light leading-7 text-cream/70">
-                                {s.desc}
-                            </p>
-                        </div>
-                        <div className="absolute bottom-0 left-0 h-px w-0 bg-gold transition-all duration-500 group-hover:w-full" />
-                    </div>
+                    <TextCard
+                        title={s.title}
+                        value={s.value}
+                        description={s.description}
+                        idx={i}
+                    />
                 ))}
             </div>
 

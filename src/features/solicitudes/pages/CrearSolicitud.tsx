@@ -28,14 +28,14 @@ export default function CrearSolicitud() {
 
     return (
         <div className="mx-auto max-w-3xl">
-            <div className="text-center">
+            <header className="text-center">
                 <div className="mb-8 flex justify-center">
                     <Overline children={"Solicita tu nueva experiencia"} />
                 </div>
                 <h1 className="font-display text-3xl font-normal text-balance text-cream sm:text-5xl">
                     Solicita tu proximo evento
                 </h1>
-            </div>
+            </header>
 
             {errorMsg && <p className="error-text">{errorMsg}</p>}
 

@@ -65,7 +65,7 @@ export function SolicitudForm({
 
     return (
         <form
-            className="solicitud-form"
+            className="flex flex-col m-auto gap-5 max-w-3xl mt-8"
             onSubmit={handleSubmit(onSubmit)}
             noValidate
         >
@@ -75,6 +75,7 @@ export function SolicitudForm({
                         label="Fecha deseada del evento"
                         type="date"
                         {...register("fecha_deseada", { valueAsDate: true })}
+                        error={errors.fecha_deseada?.message}
                     />
                 </div>
                 <div className="flex flex-col gap-2">
@@ -106,16 +107,12 @@ export function SolicitudForm({
                 </div>
             </div>
 
-            <br />
             <Input
                 label="Dirección deseada del evento"
                 type="text"
-                {...register("direccion", { valueAsDate: true })}
+                {...register("direccion")}
                 error={errors.direccion?.message}
             />
-            <br />
-
-            <br />
 
             <ButtonForm type="submit" disabled={isLoading} className="w-full">
                 {isLoading

@@ -1,4 +1,3 @@
-/* ===== src/features/dashboard/pages/ClientDashboard.tsx ===== */
 import React, { useMemo } from "react";
 import { Link } from "react-router-dom";
 import { useQueries } from "@tanstack/react-query";
@@ -8,6 +7,7 @@ import { useMisSolicitudes } from "@/features/solicitudes/hooks/useSolicitudes";
 import { citaService } from "@/features/citas/services/cita.service";
 import { useMisEventos } from "@/features/eventos/hooks/useEventos";
 import { useReseniaByEvento } from "@/features/resenias/hooks/useResenias";
+import { TextCard, type TextCardParams } from "@/shared/ui/TextCard";
 
 const TIPO_EVENTO_LABEL: Record<string, string> = {
     boda: "Boda",
@@ -119,23 +119,17 @@ export const ClientDashboard: React.FC = () => {
     }, [solicitudes]);
 
     const reseniaEstadoTexto = (() => {
-        if (!eventoRelevante || eventoRelevante.estado !== "realizado") {
-            return { texto: "Aún no disponible", clase: "status-pending" };
-        }
-        if (loadingResenia)
-            return { texto: "Cargando...", clase: "status-pending" };
-        if (!reseniaDelEvento)
-            return { texto: "Disponible", clase: "status-confirmed" };
-        if (reseniaDelEvento.estado === "pendiente") {
-            return {
-                texto: "Pendiente de aprobación",
-                clase: "status-pending",
-            };
-        }
-        if (reseniaDelEvento.estado === "aprobado") {
-            return { texto: "Aprobada", clase: "status-confirmed" };
-        }
-        return { texto: "Rechazada", clase: "status-pending" };
+        if (!eventoRelevante || eventoRelevante.estado !== "realizado")
+            return "Aún no disponible";
+
+        if (loadingResenia) return "Cargando...";
+        if (!reseniaDelEvento) return "Disponible";
+        if (reseniaDelEvento.estado === "pendiente")
+            return "Pendiente de aprobación";
+
+        if (reseniaDelEvento.estado === "aprobado") return "Aprobada";
+
+        return "Rechazada";
     })();
 
     // Progreso aproximado del flujo activo (solicitud -> cita -> evento),
@@ -156,349 +150,372 @@ export const ClientDashboard: React.FC = () => {
         return <div className="profile-page">Cargando panel...</div>;
     }
 
+    const stats = (): TextCardParams[] => {
+        const services: TextCardParams[] = [
+            {
+                value: "♪",
+                title: "Dirección Musical",
+                description:
+                    "Selección musical personalizada, DJ profesional y animación para cada momento de tu evento.",
+            },
+            {
+                value: "◈",
+                title: "Diseño Sonoro",
+                description:
+                    "Sistemas profesionales de audio, acústica y efectos sonoros de última generación.",
+            },
+            {
+                value: "✦",
+                title: "Diseño Visual",
+                description:
+                    "Pantallas LED, iluminación arquitectónica robótica y ambientación visual completa.",
+            },
+            {
+                value: "◉",
+                title: "Producción Integral",
+                description:
+                    "Coordinación total del evento: logística, montaje, contenido digital y efectos especiales.",
+            },
+        ];
+        if (
+            !kpiSolicitudes &&
+            !proximaCita &&
+            !eventoRelevante &&
+            !reseniaEstadoTexto
+        )
+            return services;
+
+        return [
+            {
+                value: `${kpiSolicitudes.total}`,
+                title: "Solicitudes",
+                description:
+                    Object.entries(kpiSolicitudes.porEstado)
+                        .map(
+                            ([estado, n]) =>
+                                `${n} ${ESTADO_SOLICITUD_LABEL[estado] ?? estado}`,
+                        )
+                        .join(" · ") || "Sin solicitudes",
+            },
+            {
+                value: proximaCita
+                    ? new Date(proximaCita.fecha_hora).toLocaleDateString(
+                          "es-MX",
+                          {
+                              day: "2-digit",
+                              month: "short",
+                          },
+                      )
+                    : "—",
+                title: "Próxima cita",
+                description: proximaCita
+                    ? `${new Date(proximaCita.fecha_hora).toLocaleTimeString(
+                          "es-MX",
+                          {
+                              hour: "numeric",
+                              minute: "2-digit",
+                          },
+                      )} · Videollamada`
+                    : "Sin citas programadas",
+            },
+            {
+                value: eventoRelevante
+                    ? (ESTADO_EVENTO_LABEL[eventoRelevante.estado] ??
+                      eventoRelevante.estado)
+                    : "Sin evento aún",
+                colorTitle:
+                    eventoRelevante?.estado === "realizado"
+                        ? "text-emerald-300"
+                        : eventoRelevante?.estado === "confirmado"
+                          ? "text-blue-300"
+                          : "text-gold",
+                title: "Mi evento",
+                description: eventoRelevante
+                    ? `${TIPO_EVENTO_LABEL[eventoRelevante.tipo_evento] ?? eventoRelevante.tipo_evento} · ${new Date(
+                          eventoRelevante.fecha_hora,
+                      ).toLocaleDateString("es-MX")}`
+                    : "Aún no registrado",
+            },
+            {
+                value: `${reseniaEstadoTexto}`,
+                colorTitle:
+                    reseniaEstadoTexto === "Aprobada"
+                        ? "text-emerald-300"
+                        : reseniaEstadoTexto === "Disponible" ||
+                            reseniaEstadoTexto === "Pendiente de aprobación"
+                          ? "text-blue-300"
+                          : "text-gold",
+                title: "Reseña",
+                description:
+                    eventoRelevante?.estado === "realizado"
+                        ? "Evento ya realizado"
+                        : "Disponible tras el evento",
+            },
+        ];
+    };
+
     return (
-        <div className="dashboard-container">
-            <main className="main-content">
-                <header className="dashboard-header">
-                    <h1 className="welcome-title">Hola, {user?.nombre} 👋</h1>
-                    <p className="welcome-subtitle">
-                        {new Date().toLocaleDateString("es-MX")}
-                        {proximaCita &&
-                            ` · Tu próxima cita es el ${new Date(
-                                proximaCita.fecha_hora,
-                            ).toLocaleDateString("es-MX")}`}
-                    </p>
-                </header>
+        <>
+            <header className="dashboard-header ">
+                <h1 className="text-3xl lg:text-4xl font-display">
+                    Bienvenido, {user?.nombre} 👋
+                </h1>
+                <p className="mt-4 font-light">
+                    {`Fecha de hoy ${new Date().toLocaleDateString("es-MX")}`}
+                    {proximaCita &&
+                        ` · Tu próxima cita es el ${new Date(
+                            proximaCita.fecha_hora,
+                        ).toLocaleDateString("es-MX")}`}
+                </p>
+            </header>
 
-                <section className="kpi-grid">
-                    <div className="kpi-card">
-                        <span className="kpi-label">Solicitudes</span>
-                        <span className="kpi-value">
-                            {kpiSolicitudes.total}
-                        </span>
-                        <span className="kpi-subtext">
-                            {Object.entries(kpiSolicitudes.porEstado)
-                                .map(
-                                    ([estado, n]) =>
-                                        `${n} ${ESTADO_SOLICITUD_LABEL[estado] ?? estado}`,
-                                )
-                                .join(" · ") || "Sin solicitudes"}
-                        </span>
-                    </div>
+            <section className="mx-auto mb-20 grid mt-10 max-w-6xl grid-cols-1 gap-0.5 md:grid-cols-2 xl:grid-cols-4">
+                {stats().map((s, i) => (
+                    <TextCard
+                        title={s.value}
+                        colorTitle={s.colorTitle}
+                        classValue="text-2xl"
+                        value={s.title}
+                        description={s.description}
+                        idx={i}
+                    />
+                ))}
+            </section>
 
-                    <div className="kpi-card">
-                        <span className="kpi-label">Próxima cita</span>
-                        <span className="kpi-value highlight">
-                            {proximaCita
-                                ? new Date(
-                                      proximaCita.fecha_hora,
-                                  ).toLocaleDateString("es-MX", {
-                                      day: "2-digit",
-                                      month: "short",
-                                  })
-                                : "—"}
-                        </span>
-                        <span className="kpi-subtext">
-                            {proximaCita
-                                ? `${new Date(
-                                      proximaCita.fecha_hora,
-                                  ).toLocaleTimeString("es-MX", {
-                                      hour: "numeric",
-                                      minute: "2-digit",
-                                  })} · Videollamada`
-                                : "Sin citas programadas"}
-                        </span>
-                    </div>
-
-                    <div className="kpi-card">
-                        <span className="kpi-label">Mi evento</span>
-                        {eventoRelevante ? (
-                            <span
-                                className={`kpi-status-text ${
-                                    eventoRelevante.estado === "realizado"
-                                        ? "status-confirmed"
-                                        : "status-pending"
-                                }`}
-                            >
-                                {ESTADO_EVENTO_LABEL[eventoRelevante.estado] ??
-                                    eventoRelevante.estado}
-                            </span>
-                        ) : (
-                            <span className="kpi-status-text status-pending">
-                                Sin evento aún
-                            </span>
+            <section className="content-grid">
+                <div className="dashboard-card main-appointment-card">
+                    <div className="card-header">
+                        <h2>Próxima cita</h2>
+                        {proximaCita && (
+                            <span className="badge-status">Programada</span>
                         )}
-                        <span className="kpi-subtext">
-                            {eventoRelevante
-                                ? `${TIPO_EVENTO_LABEL[eventoRelevante.tipo_evento] ?? eventoRelevante.tipo_evento} · ${new Date(
-                                      eventoRelevante.fecha_hora,
-                                  ).toLocaleDateString("es-MX")}`
-                                : "Aún no registrado"}
-                        </span>
                     </div>
-
-                    <div className="kpi-card">
-                        <span className="kpi-label">Reseña</span>
-                        <span
-                            className={`kpi-status-text ${reseniaEstadoTexto.clase}`}
-                        >
-                            {reseniaEstadoTexto.texto}
-                        </span>
-                        <span className="kpi-subtext">
-                            {eventoRelevante?.estado === "realizado"
-                                ? "Evento ya realizado"
-                                : "Disponible tras el evento"}
-                        </span>
-                    </div>
-                </section>
-
-                <section className="content-grid">
-                    <div className="dashboard-card main-appointment-card">
-                        <div className="card-header">
-                            <h2>Próxima cita</h2>
-                            {proximaCita && (
-                                <span className="badge-status">Programada</span>
-                            )}
-                        </div>
-                        <div className="appointment-body">
-                            {proximaCita ? (
-                                <>
-                                    <h3 className="appointment-date">
-                                        {new Date(
-                                            proximaCita.fecha_hora,
-                                        ).toLocaleDateString("es-MX", {
-                                            weekday: "long",
-                                            day: "2-digit",
-                                            month: "short",
-                                        })}{" "}
-                                        ·{" "}
-                                        {new Date(
-                                            proximaCita.fecha_hora,
-                                        ).toLocaleTimeString("es-MX", {
-                                            hour: "numeric",
-                                            minute: "2-digit",
-                                        })}
-                                    </h3>
-                                    <p className="appointment-desc">
-                                        Videollamada para definir detalles
-                                        {solicitudDeCitaProxima
-                                            ? ` de ${
-                                                  TIPO_EVENTO_LABEL[
-                                                      solicitudDeCitaProxima
-                                                          .tipo_evento
-                                                  ] ??
-                                                  solicitudDeCitaProxima.tipo_evento
-                                              }`
-                                            : ""}
-                                    </p>
-
-                                    <div className="meet-link-container">
-                                        <label>Enlace Meet disponible</label>
-                                        <input
-                                            type="text"
-                                            readOnly
-                                            value={
-                                                proximaCita.enlace_videollamada
-                                            }
-                                            className="meet-input"
-                                        />
-                                    </div>
-                                    <a
-                                        href={proximaCita.enlace_videollamada}
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                        className="btn-primary-gold"
-                                    >
-                                        Unirme a la videollamada
-                                    </a>
-                                </>
-                            ) : (
+                    <div className="appointment-body">
+                        {proximaCita ? (
+                            <>
+                                <h3 className="appointment-date">
+                                    {new Date(
+                                        proximaCita.fecha_hora,
+                                    ).toLocaleDateString("es-MX", {
+                                        weekday: "long",
+                                        day: "2-digit",
+                                        month: "short",
+                                    })}{" "}
+                                    ·{" "}
+                                    {new Date(
+                                        proximaCita.fecha_hora,
+                                    ).toLocaleTimeString("es-MX", {
+                                        hour: "numeric",
+                                        minute: "2-digit",
+                                    })}
+                                </h3>
                                 <p className="appointment-desc">
-                                    No tienes citas programadas por ahora.
+                                    Videollamada para definir detalles
+                                    {solicitudDeCitaProxima
+                                        ? ` de ${
+                                              TIPO_EVENTO_LABEL[
+                                                  solicitudDeCitaProxima
+                                                      .tipo_evento
+                                              ] ??
+                                              solicitudDeCitaProxima.tipo_evento
+                                          }`
+                                        : ""}
                                 </p>
-                            )}
-                        </div>
+
+                                <div className="meet-link-container">
+                                    <label>Enlace Meet disponible</label>
+                                    <input
+                                        type="text"
+                                        readOnly
+                                        value={proximaCita.enlace_videollamada}
+                                        className="meet-input"
+                                    />
+                                </div>
+                                <a
+                                    href={proximaCita.enlace_videollamada}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="btn-primary-gold"
+                                >
+                                    Unirme a la videollamada
+                                </a>
+                            </>
+                        ) : (
+                            <p className="appointment-desc">
+                                No tienes citas programadas por ahora.
+                            </p>
+                        )}
+                    </div>
+                </div>
+
+                <div className="dashboard-card event-status-card">
+                    <div className="card-header">
+                        <h2>Estado de mi evento</h2>
+                        {eventoRelevante && (
+                            <Link
+                                to={`/eventos/${eventoRelevante.id_evento}`}
+                                className="link-detail"
+                            >
+                                Ver detalle →
+                            </Link>
+                        )}
                     </div>
 
-                    <div className="dashboard-card event-status-card">
-                        <div className="card-header">
-                            <h2>Estado de mi evento</h2>
-                            {eventoRelevante && (
-                                <Link
-                                    to={`/eventos/${eventoRelevante.id_evento}`}
-                                    className="link-detail"
-                                >
-                                    Ver detalle →
-                                </Link>
-                            )}
-                        </div>
+                    {eventoRelevante ? (
+                        <div className="event-details-list">
+                            <div className="status-badge-row">
+                                <span className="badge-pill-green">
+                                    ●{" "}
+                                    {ESTADO_EVENTO_LABEL[
+                                        eventoRelevante.estado
+                                    ] ?? eventoRelevante.estado}
+                                </span>
+                            </div>
+                            <div className="detail-item">
+                                <span className="detail-label">Tipo</span>
+                                <span className="detail-value">
+                                    {TIPO_EVENTO_LABEL[
+                                        eventoRelevante.tipo_evento
+                                    ] ?? eventoRelevante.tipo_evento}
+                                </span>
+                            </div>
+                            <div className="detail-item">
+                                <span className="detail-label">
+                                    Fecha del evento
+                                </span>
+                                <span className="detail-value">
+                                    {new Date(
+                                        eventoRelevante.fecha_hora,
+                                    ).toLocaleDateString("es-MX")}
+                                </span>
+                            </div>
+                            <div className="detail-item">
+                                <span className="detail-label">Dirección</span>
+                                <span className="detail-value">
+                                    {eventoRelevante.direccion}
+                                </span>
+                            </div>
+                            <div className="detail-item">
+                                <span className="detail-label">Cliente</span>
+                                <span className="detail-value">
+                                    {user?.nombre} {user?.apellido}
+                                </span>
+                            </div>
+                            <div className="detail-item">
+                                <span className="detail-label">Progreso</span>
+                                <div className="progress-bar-container">
+                                    <div
+                                        className={`progress-segment ${segmentoActivo >= 1 ? "active" : ""}`}
+                                    />
+                                    <div
+                                        className={`progress-segment ${segmentoActivo >= 2 ? "active" : ""}`}
+                                    />
+                                    <div
+                                        className={`progress-segment ${segmentoActivo >= 3 ? "active" : ""}`}
+                                    />
+                                </div>
+                            </div>
 
-                        {eventoRelevante ? (
-                            <div className="event-details-list">
-                                <div className="status-badge-row">
-                                    <span className="badge-pill-green">
-                                        ●{" "}
-                                        {ESTADO_EVENTO_LABEL[
-                                            eventoRelevante.estado
-                                        ] ?? eventoRelevante.estado}
-                                    </span>
-                                </div>
-                                <div className="detail-item">
-                                    <span className="detail-label">Tipo</span>
-                                    <span className="detail-value">
-                                        {TIPO_EVENTO_LABEL[
-                                            eventoRelevante.tipo_evento
-                                        ] ?? eventoRelevante.tipo_evento}
-                                    </span>
-                                </div>
-                                <div className="detail-item">
-                                    <span className="detail-label">
-                                        Fecha del evento
-                                    </span>
-                                    <span className="detail-value">
-                                        {new Date(
-                                            eventoRelevante.fecha_hora,
-                                        ).toLocaleDateString("es-MX")}
-                                    </span>
-                                </div>
-                                <div className="detail-item">
-                                    <span className="detail-label">
-                                        Dirección
-                                    </span>
-                                    <span className="detail-value">
-                                        {eventoRelevante.direccion}
-                                    </span>
-                                </div>
-                                <div className="detail-item">
-                                    <span className="detail-label">
-                                        Cliente
-                                    </span>
-                                    <span className="detail-value">
-                                        {user?.nombre} {user?.apellido}
-                                    </span>
-                                </div>
-                                <div className="detail-item">
-                                    <span className="detail-label">
-                                        Progreso
-                                    </span>
-                                    <div className="progress-bar-container">
-                                        <div
-                                            className={`progress-segment ${segmentoActivo >= 1 ? "active" : ""}`}
-                                        />
-                                        <div
-                                            className={`progress-segment ${segmentoActivo >= 2 ? "active" : ""}`}
-                                        />
-                                        <div
-                                            className={`progress-segment ${segmentoActivo >= 3 ? "active" : ""}`}
-                                        />
-                                    </div>
-                                </div>
+                            <hr className="card-divider" />
 
-                                <hr className="card-divider" />
-
-                                <div className="timeline-section">
-                                    <h3>Línea de tiempo</h3>
-                                    <div className="timeline">
-                                        {solicitudDelEvento && (
-                                            <div className="timeline-item done">
-                                                <div className="timeline-dot" />
-                                                <div className="timeline-info">
-                                                    <p className="timeline-title">
-                                                        Solicitud enviada
-                                                    </p>
-                                                    <span className="timeline-date">
-                                                        {new Date(
-                                                            solicitudDelEvento.created_at,
-                                                        ).toLocaleDateString(
-                                                            "es-MX",
-                                                        )}
-                                                    </span>
-                                                </div>
-                                            </div>
-                                        )}
-
-                                        {proximaCita && (
-                                            <div className="timeline-item done">
-                                                <div className="timeline-dot" />
-                                                <div className="timeline-info">
-                                                    <p className="timeline-title">
-                                                        Cita programada
-                                                    </p>
-                                                    {/* Fecha real programada, no una fecha de transición inferida. */}
-                                                    <span className="timeline-date">
-                                                        {new Date(
-                                                            proximaCita.fecha_hora,
-                                                        ).toLocaleDateString(
-                                                            "es-MX",
-                                                        )}
-                                                    </span>
-                                                </div>
-                                            </div>
-                                        )}
-
-                                        <div
-                                            className={`timeline-item ${
-                                                todasLasCitas.some(
-                                                    (c) =>
-                                                        c.estado ===
-                                                        "realizada",
-                                                )
-                                                    ? "done"
-                                                    : "pending"
-                                            }`}
-                                        >
+                            <div className="timeline-section">
+                                <h3>Línea de tiempo</h3>
+                                <div className="timeline">
+                                    {solicitudDelEvento && (
+                                        <div className="timeline-item done">
                                             <div className="timeline-dot" />
                                             <div className="timeline-info">
                                                 <p className="timeline-title">
-                                                    Cita realizada
+                                                    Solicitud enviada
                                                 </p>
-                                                <span className="timeline-date">
-                                                    {todasLasCitas.some(
-                                                        (c) =>
-                                                            c.estado ===
-                                                            "realizada",
-                                                    )
-                                                        ? "Completada"
-                                                        : "Pendiente"}
-                                                </span>
-                                            </div>
-                                        </div>
-
-                                        <div
-                                            className={`timeline-item ${
-                                                eventoRelevante.estado ===
-                                                "realizado"
-                                                    ? "done"
-                                                    : "future"
-                                            }`}
-                                        >
-                                            <div className="timeline-dot" />
-                                            <div className="timeline-info">
-                                                <p className="timeline-title">
-                                                    Evento realizado
-                                                </p>
-                                                {/* Fecha programada del evento, no fecha real de
-                            realización (esa transición no se registra). */}
                                                 <span className="timeline-date">
                                                     {new Date(
-                                                        eventoRelevante.fecha_hora,
+                                                        solicitudDelEvento.created_at,
                                                     ).toLocaleDateString(
                                                         "es-MX",
                                                     )}
                                                 </span>
                                             </div>
                                         </div>
+                                    )}
+
+                                    {proximaCita && (
+                                        <div className="timeline-item done">
+                                            <div className="timeline-dot" />
+                                            <div className="timeline-info">
+                                                <p className="timeline-title">
+                                                    Cita programada
+                                                </p>
+                                                {/* Fecha real programada, no una fecha de transición inferida. */}
+                                                <span className="timeline-date">
+                                                    {new Date(
+                                                        proximaCita.fecha_hora,
+                                                    ).toLocaleDateString(
+                                                        "es-MX",
+                                                    )}
+                                                </span>
+                                            </div>
+                                        </div>
+                                    )}
+
+                                    <div
+                                        className={`timeline-item ${
+                                            todasLasCitas.some(
+                                                (c) => c.estado === "realizada",
+                                            )
+                                                ? "done"
+                                                : "pending"
+                                        }`}
+                                    >
+                                        <div className="timeline-dot" />
+                                        <div className="timeline-info">
+                                            <p className="timeline-title">
+                                                Cita realizada
+                                            </p>
+                                            <span className="timeline-date">
+                                                {todasLasCitas.some(
+                                                    (c) =>
+                                                        c.estado ===
+                                                        "realizada",
+                                                )
+                                                    ? "Completada"
+                                                    : "Pendiente"}
+                                            </span>
+                                        </div>
+                                    </div>
+
+                                    <div
+                                        className={`timeline-item ${
+                                            eventoRelevante.estado ===
+                                            "realizado"
+                                                ? "done"
+                                                : "future"
+                                        }`}
+                                    >
+                                        <div className="timeline-dot" />
+                                        <div className="timeline-info">
+                                            <p className="timeline-title">
+                                                Evento realizado
+                                            </p>
+                                            {/* Fecha programada del evento, no fecha real de
+                            realización (esa transición no se registra). */}
+                                            <span className="timeline-date">
+                                                {new Date(
+                                                    eventoRelevante.fecha_hora,
+                                                ).toLocaleDateString("es-MX")}
+                                            </span>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        ) : (
-                            <p className="appointment-desc">
-                                Aún no tienes un evento registrado.
-                            </p>
-                        )}
-                    </div>
-                </section>
-            </main>
-        </div>
+                        </div>
+                    ) : (
+                        <p className="appointment-desc">
+                            Aún no tienes un evento registrado.
+                        </p>
+                    )}
+                </div>
+            </section>
+        </>
     );
 };
