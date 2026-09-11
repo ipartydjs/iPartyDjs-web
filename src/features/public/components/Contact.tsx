@@ -2,10 +2,15 @@ import { useState, useRef, useEffect } from "react";
 import clsx from "clsx";
 import { useContact } from "@/core/hooks/useContact";
 import type { CreateContactInput } from "@ipartydjs/shared";
-import { ButtonForm, Input, Textarea, DecorativeShape } from "@/shared/ui";
-
-const inputClasses =
-    "w-full border border-white/8 bg-surface-1 px-4 py-3.5 font-body text-[0.78rem] font-light text-cream placeholder:text-cream/25 outline-none transition-colors duration-300 focus:border-gold focus:bg-surface-2";
+import {
+    ButtonForm,
+    Input,
+    Textarea,
+    DecorativeShape,
+    Button,
+    Select,
+} from "@/shared/ui";
+import Overline from "@/shared/ui/Overline";
 
 const labelClasses = "text-[0.6rem] tracking-[0.2em] uppercase text-gold";
 
@@ -84,22 +89,23 @@ const Contact = () => {
                             : "-translate-x-8 opacity-0",
                     )}
                 >
-                    <span className="mb-6 block text-[0.6rem] tracking-[0.35em] text-gold uppercase">
-                        — Contacto —
-                    </span>
+                    <Overline children={"Contacto"} />
+                    <br />
 
-                    <h2 className="mb-6 font-display text-[clamp(2.2rem,4.5vw,3.8rem)] leading-tight font-light text-cream">
+                    <h1 className="font-display text-5xl font-normal text-balance text-cream sm:text-7xl">
                         Hablemos.
                         <br />
-                        <em className="text-gold italic">
+                        <span className="text-gold not-italic">
                             Tu evento comienza aquí.
-                        </em>
-                    </h2>
+                        </span>
+                    </h1>
 
-                    <p className="mb-12 max-w-500px font-body text-[0.78rem] leading-[1.8] font-light text-cream-dim">
+                    <p className="mt-8 font-body text-sm text-pretty text-cream-dim sm:text-base">
                         Cuéntanos tu idea. Nosotros la convertimos en una
                         experiencia que nadie olvidará.
                     </p>
+
+                    <br />
 
                     <div className="flex flex-col gap-6">
                         <div className="flex items-start gap-4">
@@ -224,33 +230,32 @@ const Contact = () => {
                                     />
                                 </div>
                                 <div className="flex flex-col gap-2">
-                                    <label
-                                        htmlFor="tipoEvento"
-                                        className={labelClasses}
-                                    >
-                                        Tipo de evento
-                                    </label>
-                                    <select
-                                        id="tipoEvento"
+                                    <Select
+                                        label="Tipo de evento"
                                         name="tipo_evento"
                                         value={form.tipo_evento}
                                         onChange={handleChange}
+                                        options={[
+                                            { label: "Boda", value: "boda" },
+                                            {
+                                                label: "XV Años",
+                                                value: "xv_anos",
+                                            },
+                                            {
+                                                label: "Cumpleaños",
+                                                value: "cumpleanos",
+                                            },
+                                            {
+                                                label: "Corporativo",
+                                                value: "corporativo",
+                                            },
+                                            {
+                                                label: "Otro",
+                                                value: "otro",
+                                            },
+                                        ]}
                                         required
-                                        className={inputClasses}
-                                    >
-                                        <option value="" disabled>
-                                            Selecciona...
-                                        </option>
-                                        <option value="boda">Boda</option>
-                                        <option value="xv_anos">XV Años</option>
-                                        <option value="cumpleanos">
-                                            Cumpleaños
-                                        </option>
-                                        <option value="corporativo">
-                                            Evento Empresarial
-                                        </option>
-                                        <option value="otro">Otro</option>
-                                    </select>
+                                    />
                                 </div>
                             </div>
 
@@ -308,6 +313,15 @@ const Contact = () => {
                             </ButtonForm>
                         </form>
                     )}
+
+                    <div className="mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row">
+                        <Button href="/login">
+                            Ya eres cliente? <small>Ingresa a tu perfil</small>
+                        </Button>
+                        <Button href="/register" variant="outline">
+                            O Registrate para ser cliente
+                        </Button>
+                    </div>
                 </div>
             </div>
         </section>

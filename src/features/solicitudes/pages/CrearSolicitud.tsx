@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import type { CreateSolicitudInput } from "@ipartydjs/shared";
 import { SolicitudForm } from "@/features/solicitudes/components/SolicitudForm";
 import { useCrearSolicitud } from "@/features/solicitudes/hooks/useSolicitudes";
+import Overline from "@/shared/ui/Overline";
 
 export default function CrearSolicitud() {
     const crear = useCrearSolicitud();
@@ -26,10 +27,18 @@ export default function CrearSolicitud() {
     };
 
     return (
-        <div className="er-main">
-            <h1>Nueva solicitud</h1>
+        <div className="mx-auto max-w-3xl">
+            <header className="text-center">
+                <div className="mb-8 flex justify-center">
+                    <Overline children={"Solicita tu nueva experiencia"} />
+                </div>
+                <h1 className="font-display text-3xl font-normal text-balance text-cream sm:text-5xl">
+                    Solicita tu proximo evento
+                </h1>
+            </header>
 
             {errorMsg && <p className="error-text">{errorMsg}</p>}
+
             <SolicitudForm
                 mode="crear"
                 onSubmit={handleSubmit}
