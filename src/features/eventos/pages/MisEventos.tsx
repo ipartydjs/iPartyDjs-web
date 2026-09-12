@@ -19,7 +19,7 @@ export default function MisEventos() {
     const { data: eventos, isLoading, isError, error } = useMisEventos();
 
     return (
-        <div className="mc-main">
+        <div>
             <h1>Mis eventos</h1>
             <br />
 

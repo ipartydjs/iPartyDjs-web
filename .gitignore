@@ -28,3 +28,4 @@ dist-ssr
 
 .npmrc
 .env
+.env.local

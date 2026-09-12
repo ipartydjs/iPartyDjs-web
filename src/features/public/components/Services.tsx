@@ -29,6 +29,12 @@ const services: TextCardParams[] = [
     },
 ];
 
+const stats = [
+    { value: 250, suffix: "+", label: "Eventos realizados" },
+    { value: 10, suffix: " años", label: "De experiencia" },
+    { value: 100, suffix: "%", label: "Clientes satisfechos" },
+];
+
 const Services = () => {
     const sectionRef = useRef<HTMLElement>(null);
 
@@ -86,6 +92,15 @@ const Services = () => {
                         </span>
                     ))}
                 </div>
+            </div>
+            <div className="mx-auto mb-20 grid mt-10 max-w-6xl grid-cols-1 gap-0.5 md:grid-cols-2 xl:grid-cols-3">
+                {stats.map((s, i) => (
+                    <TextCard
+                        title={s.label}
+                        value={`${s.value} ${s.suffix}`}
+                        idx={i}
+                    />
+                ))}
             </div>
         </section>
     );

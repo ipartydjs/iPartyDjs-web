@@ -1,4 +1,3 @@
-/* ===== src/features/resenias/pages/MisResenias.tsx ===== */
 import { useState } from "react";
 import { useAuthStore } from "@/core/stores/auth.store";
 import {
@@ -191,7 +190,7 @@ export default function MisResenias() {
         : [];
 
     return (
-        <div className="mc-main">
+        <div className="">
             <h1>Mis reseñas</h1>
             <br />
 

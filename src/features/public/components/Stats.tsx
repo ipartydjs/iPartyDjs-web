@@ -1,3 +1,4 @@
+import { TextCard } from "@/shared/ui/TextCard";
 import { useEffect, useRef, useState } from "react";
 
 const stats = [
@@ -75,6 +76,15 @@ const Stats = () => {
             bg-[radial-gradient(ellipse_60%_50%_at_0%_0%,color-mix(in_srgb,var(--color-gold)_14%,transparent),transparent_70%),radial-gradient(ellipse_60%_50%_at_100%_0%,color-mix(in_srgb,var(--color-gold-light)_12%,transparent),transparent_70%)]
             p-8 text-cream"
         >
+            <div className="mx-auto mb-20 grid mt-10 max-w-6xl grid-cols-1 gap-0.5 md:grid-cols-2 xl:grid-cols-3">
+                {stats.map((s, i) => (
+                    <TextCard
+                        title={s.label}
+                        value={`${s.value} ${s.suffix}`}
+                        idx={i}
+                    />
+                ))}
+            </div>
             <div className="mx-auto grid max-w-6xl gap-6 px-4 sm:grid-cols-2 lg:grid-cols-3">
                 {stats.map((s) => (
                     <StatItem key={s.label} {...s} active={active} />
